@@ -70,6 +70,8 @@ namespace ApiDocs.Validation.OData
             this.Parameters = new List<Parameter>();
         }
 
+        [XmlAttribute("WorkloadName", Namespace = ODataParser.AgsNamespace)]
+        public string WorkloadName { get; set; }
 
         #region ITransformable
         [XmlIgnore, MergePolicy(MergePolicy.Ignore)]
@@ -133,6 +135,20 @@ namespace ApiDocs.Validation.OData
                     return names.ComponentsJoinedByString(",");
                 return string.Empty;
             }
+        }
+
+        public override void ApplyTransformation(BaseModifications mods, EntityFramework edmx, string[] versions)
+        {
+            TransformationHelper.ApplyTransformation(this, mods, edmx, versions, (key, value) =>
+            {
+                if (key == "GraphFunctionName")
+                {
+                    this.WorkloadName = this.Name;
+                    this.Name = (string)value;
+                    return true;
+                }
+                return false;
+            });
         }
         #endregion
     }

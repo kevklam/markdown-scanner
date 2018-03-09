@@ -129,6 +129,9 @@ namespace ApiDocs.Validation.OData.Transformation
 
         [JsonProperty("returnType")]
         public ReturnTypeModification ReturnType { get; set; }
+
+        [JsonProperty("graphName")]
+        public string GraphFunctionName { get; set; }
     }
 
     public class ReturnTypeModification : CommonModificationProperties
@@ -154,6 +157,8 @@ namespace ApiDocs.Validation.OData.Transformation
         [JsonProperty("unicode")]
         public bool? Unicode { get; set; }
 
+        [JsonProperty("graphName")]
+        public string GraphParameterName { get; set; }
     }
 
     public class EntityContainerModification : CommonModificationProperties

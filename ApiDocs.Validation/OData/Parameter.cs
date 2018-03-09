@@ -78,6 +78,9 @@ namespace ApiDocs.Validation.OData
                 }
             }
         }
+        
+        [XmlAttribute("WorkloadName", Namespace = ODataParser.AgsNamespace)]
+        public string WorkloadName { get; set; }
 
         [XmlAttribute("Unicode"), MergePolicy(MergePolicy.Ignore)]
         public bool UnicodePropertyValue { get; set; }
@@ -113,9 +116,18 @@ namespace ApiDocs.Validation.OData
         [XmlIgnore, MergePolicy(MergePolicy.Ignore)]
         public override string ElementIdentifier { get { return this.Name; } set { this.Name = value; } }
 
-        public override void ApplyTransformation(BaseModifications value, EntityFramework edmx, string[] versions)
+        public override void ApplyTransformation(BaseModifications mods, EntityFramework edmx, string[] versions)
         {
-            base.ApplyTransformation(value, edmx, versions);
+            TransformationHelper.ApplyTransformation(this, mods, edmx, versions, (key, value) =>
+            {
+                if (key == "GraphParameterName")
+                {
+                    this.WorkloadName = this.Name;
+                    this.Name = (string)value;
+                    return true;
+                }
+                return false;
+            });
         }
     }
 }
